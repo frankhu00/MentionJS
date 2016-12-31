@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+        <script type="text/javascript" src="mention.js"></script>
+        <style>
+            /** Demo CSS style class to be used with mention JS **/
+            .demoUlStyle {
+                list-style-type: georgian;
+                border: 1px solid black;
+                width: 315px;
+            }
+            
+            .demoDataStyle {
+                color: #51aaff;
+            }
+            
+            .demoLiStyle {
+                padding: 10px;
+            }
+            /** Demo CSS style end **/
+            
+            .centered {
+                margin: auto;
+                width: 80%;
+                padding: 10px;
+            }
+            
+            .tonari {
+                display: inline-block;
+                width: 48%;
+                vertical-align: top
+            }
+            
+            ul {
+                list-style-type: none;
+            }
+
+            li {
+                margin: 10px;
+            }
+            
+            textarea {
+                width: 350px;
+                height: 150px;
+                font-size: 15px;
+            }
+            
+            comment {
+                color: dimgray;
+                font-size: 10px;
+                white-space: pre-line;
+                margin: 0px;
+                padding: 0px;
+            }
+            
+            code {
+                color: black;
+                font-size: 12px;
+                white-space: pre-line;
+            }
+            
+            json {
+                font-size: 12px;
+                white-space: pre-wrap;
+            }
+            
+        </style>
+	</head>
+	<body>
+        <h1 class="centered" style="text-align: center">
+            Mention JS Example Page
+        </h1>
+        <div class="centered">
+            <example class="tonari">
+                <div class="centered">
+                    <p name="ex1">Example 1 : Advanced Usage</p>
+                    <textarea id='test' placeholder="Type here. Use $ to start mention searching within 'company' and 'network' field"></textarea>
+                </div>
+                <div class="centered">
+                    <p name="ex2">Example 2 : Default Usage</p>
+                    <textarea name="test2" id="testid2" class='testclass2' placeholder="Type here. Use @ to start mention searching within 'username' and 'name' field"></textarea>
+                </div>
+                <div class="centered">
+                    <p name="exJSON">Example JSON Data</p>
+                    <json id="jsonData"></json>
+                </div>
+            </example>
+            <JScode class="tonari" style="border: 2px solid black; padding-left: 15px;">
+                <h5 style="margin-bottom: 0px;">Example 1 : Advanced Usage</h5>
+                    <code>
+                        <comment>//Specify DOM element via id
+                        //Search only company and network field</comment>
+                        var params = {
+                        &nbsp;&nbsp;&nbsp;&nbsp;dom: '#test', 
+                        &nbsp;&nbsp;&nbsp;&nbsp;data: json.users,
+                        &nbsp;&nbsp;&nbsp;&nbsp;searchBy: ['company','network']
+                        } 
+                        var mention = new Mention(params);
+                        <comment>//Starts mention via '$'
+                        //Adds CSS class to generated dropdown HTML
+                        //Defines dropdown list limit to maximum of 2 entries</comment>
+                        mention.init({
+                        &nbsp;&nbsp;&nbsp;&nbsp;delimiter       : '$',
+                        &nbsp;&nbsp;&nbsp;&nbsp;caseSensitive   : false,
+                        &nbsp;&nbsp;&nbsp;&nbsp;dropdownLimit   : 2,
+                        &nbsp;&nbsp;&nbsp;&nbsp;event           : 'keyup'
+                        },{
+                        &nbsp;&nbsp;&nbsp;&nbsp;dataHolder   : 'demoDataStyle',
+                        &nbsp;&nbsp;&nbsp;&nbsp;ul           : 'demoUlStyle',
+                        &nbsp;&nbsp;&nbsp;&nbsp;li           : 'demoLiStyle',
+                        });
+                        <comment>//For custom onClick function</comment>
+                        mention.onClick(function(data){
+                        <comment>//Run to close dropdown</comment>
+                        &nbsp;&nbsp;&nbsp;&nbsp;mention.closeHTML();
+
+                        <comment>//Note: data is the whole data object for the specific  element clicked
+                        //Therefore, accessing fields other than those specified by  searchBy array is possible</comment>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert('You have clicked on user: ' + data.name + ', associated  with company: ' + data.company);
+
+                        <comment>//Disable JS
+                        //Re-enable by calling init() again
+                        //mention.disable();</comment>
+                        });
+                        
+                        <comment>//Runs block whenever event is fired. Defined via opt.event</comment>
+                        mention.listen(function(){
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log("Run additional codes here on event fire!");
+                        });
+                    </code>
+                <h5 style="margin-bottom: 0px;">Example 2 : Default Usage</h5>
+                    <code>
+                        <comment>//Search by username and name
+                        //Starts mention with @ (default)
+                        //Selects DOM element via name attribute</comment>
+                        var params2 = {
+                        &nbsp;&nbsp;&nbsp;&nbsp;dom: 'test2',
+                        &nbsp;&nbsp;&nbsp;&nbsp;data: json.users,
+                        &nbsp;&nbsp;&nbsp;&nbsp;searchBy: ['username','name']
+                        }
+
+                        <comment>//Default onClick function will auto-complete the textarea by filling in the FIRST key specified in searchBy array</comment>
+                        var mentionJS = new Mention(params2);
+                        mentionJS.init();
+
+                    </code>
+            </JScode>
+        </div>
+	</body>
+    
+    <script>
+        //Example data
+        var json = {
+            "users" : [
+                {
+                    "username"  : "user123",
+                    "name"      : "Slime",
+                    'company'   : 'TheFamedUser',
+                    'network'   : 'TheLegend27',
+                    "user_link" : "TheGrandTranslatorSlime"
+                },
+                {
+                    "username"  : "client789",
+                    "name"      : "Wobbuffet",
+                    'company'   : 'GrandPokeArena',
+                    'network'   : 'BlueForLife',
+                    "user_link" : "client-url"
+                },
+                {
+                    "username"  : "TestSubject#5077",
+                    "name"      : "Number 5077",
+                    'company'   : 'Soma',
+                    'network'   : 'Insomnia',
+                    "user_link" : "Why-So-Serious"
+                },
+                {
+                    'username'  : 'Fluffy',
+                    'name'      : 'Puppy',
+                    'company'   : 'FluffWorks',
+                    'network'   : 'Justice',
+                    'user_link' : 'mashiroDog'
+                },
+                {
+                    'username'  : 'FeelMyWrath',
+                    'name'      : 'Thor',
+                    'company'   : 'Asgard',
+                    'network'   : 'The Realms',
+                    'user_link' : 'thunder'
+                }
+            ]};
+
+        //Print json data onto html
+        (function(){
+            var dataNode = document.getElementById('jsonData');
+            var stringData = JSON.stringify(json, null, 2);
+            dataNode.textContent = stringData;
+        })();
+        
+                
+        //Example 1 : Advanced Usage
+        
+        //Specify DOM element via id
+        //Search only company and network field
+        var params = {
+            dom: '#test',
+            data: json.users,
+            searchBy: ['company','network']
+        }
+        
+        var mention = new Mention(params);
+
+        //Starts mention via '$'
+        //Adds CSS class to generated dropdown HTML
+        mention.init({
+                delimiter       : '$',
+                caseSensitive   : false,
+                dropdownLimit   : 2,
+                event           : 'keyup'
+            },{
+                dataHolder   : 'demoDataStyle',
+                ul           : 'demoUlStyle',
+                li           : 'demoLiStyle',
+            });
+        
+        //For custom onClick function
+        mention.onClick(function(data){
+            //Run to close dropdown
+            mention.closeHTML();
+            
+            //Note: data is the whole data object for the specific element clicked
+            //Therefore, accessing fields other than those specified by searchBy array is possible
+            alert('You have clicked on user: ' + data.name + ', associated with company: ' + data.company);
+            
+            //Disable JS
+            //Re-enable by calling init() again
+            //mention.disable();
+        });
+        
+        //Runs block whenever event is fired. Defined via opt.event
+        mention.listen(function(){
+            console.log("Run additional codes here on event fire!");
+        });
+        
+        
+        
+        
+        //Example 2 : Default usage
+        //Search by username and name
+        //Starts mention with @ (default)
+        //Selects DOM element via name attribute
+        
+        var params2 = {
+            dom: 'test2',
+            data: json.users,
+            searchBy: ['username','name']
+        }
+        
+        //Default onClick function will auto-complete the textarea by filling in the FIRST key specified in searchBy array
+        
+        var mentionJS = new Mention(params2);
+        mentionJS.init();
+        
+    </script>
+    
+</html>
